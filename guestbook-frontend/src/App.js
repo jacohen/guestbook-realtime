@@ -31,46 +31,46 @@ function App() {
 
   return (
     <div className="App">
-      <Typography variant="h4"> Write a Message </Typography>
+      <Typography variant="h2"> Guest Book </Typography>
 
-      <Box component="span" m={1}>
-        <form className="App" noValidate autoComplete="off">
-          <TextField
-            label="Name"
-            variant="outlined"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <TextField
-            label="Message"
-            variant="outlined"
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-            }}
-          />
+      <Box display="flex" alignItems="center" justifyContent="center">
+        <TextField
+          label="Name"
+          variant="outlined"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        />
+        <TextField
+          label="Message"
+          variant="outlined"
+          value={message}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+        />
 
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            onClick={postMessage}
-          >
-            Submit
-          </Button>
-        </form>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={postMessage}
+        >
+          Submit
+        </Button>
       </Box>
 
+      <br />
       <Typography variant="h4"> Messages </Typography>
       {guestbook.map((guest) => {
         return (
-          <Paper style={{ marginBottom: "10px" }}>
+          <div>
+            {/* <Paper style={{ marginTop: "10px", marginBottom: "10px", paddingBottom:"10px"}}> */}
             <TextField label="Name" value={guest.name} />
-
             <TextField label="Message" value={guest.message} />
-          </Paper>
+            {/* </Paper> */}
+          </div>
         );
       })}
     </div>
