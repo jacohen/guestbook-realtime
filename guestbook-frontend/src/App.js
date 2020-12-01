@@ -1,46 +1,35 @@
-import logo from "./logo.svg";
-import "./App.css";
-
+// React
 import React from "react";
-import Button from '@material-ui/core/Button';
+
+// Material-ui
+import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
-// import 'fontsource-roboto';
-// <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+// App
+import "./App.css";
 
 function App() {
-  const endpoint =
-    "https://us-central1-divya-guestbook.cloudfunctions.net/guestbookApi";
+  const endpoint = process.env.REACT_APP_API_URL;
 
-  // const [guestbook, setGuestbook] = React.useState([
-  //   { name: "Jack", message: "This is a cool app" },
-  //   {
-  //     name: "Divya",
-  //     message: "I like it too",
-  //   },
-  // ]);
-
+  /** State ***********************************************************/
+  // Guestbook
   const [guestbook, setGuestbook] = React.useState([]);
 
-  //Add new guest message
+  // Message Form
   const [name, setName] = React.useState("");
   const [message, setMessage] = React.useState("");
 
-  //Get guestbook data
+  /** Functions ********************************************************/
+  // Get guestbook data
   const getGuestbook = () => {
     fetch(endpoint)
       .then((response) => response.json())
       .then((data) => setGuestbook(data));
   };
 
-  //Post a Message
-  // const postMessage = () => {
-  //   setGuestbook([...guestbook, { name: name, message: message }]);
-  // };
-
-  //Post Guestbook data
+  // Post Guestbook data
   const postMessage = () => {
     let guest = {
       name: name,
@@ -48,27 +37,22 @@ function App() {
     };
     fetch(endpoint, {
       method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
       },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-
       body: JSON.stringify(guest),
     }).then(() => {
       getGuestbook();
     });
   };
 
-  //on page load
+  /** Effects *********************************************************/
+  // On page load
   React.useEffect(() => {
     getGuestbook();
   }, []);
 
-
+  /** Render page *****************************************************/
   return (
     <div className="App">
       <Typography variant="h2"> Guest Book </Typography>
@@ -106,10 +90,8 @@ function App() {
       {guestbook.map((guest) => {
         return (
           <div>
-            {/* <Paper style={{ marginTop: "10px", marginBottom: "10px", paddingBottom:"10px"}}> */}
             <TextField label="Name" value={guest.name} />
             <TextField label="Message" value={guest.message} />
-            {/* </Paper> */}
           </div>
         );
       })}
