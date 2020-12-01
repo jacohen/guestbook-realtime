@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 
 // Firebase
 import firebase from "firebase";
-
 import firebaseConfig from "./firebaseConfig.json";
 
 // App
@@ -46,7 +45,7 @@ function App() {
       .database()
       .ref("/posts/")
       .on("child_added", (data) => {
-        console.log(data.val());
+        // console.log(data.val());
         setGuestbook((state) => [data.val(), ...state]);
       });
   }, []);
