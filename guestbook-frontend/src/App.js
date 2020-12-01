@@ -7,11 +7,19 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+// Firebase
+import firebase from "firebase";
+
+import firebaseConfig from "./firebaseConfig.json";
+
 // App
 import "./App.css";
 
 function App() {
-  const endpoint = process.env.REACT_APP_API_URL;
+  /** Realtime database *************************************************/
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
   /** State ***********************************************************/
   // Guestbook
@@ -22,34 +30,25 @@ function App() {
   const [message, setMessage] = React.useState("");
 
   /** Functions ********************************************************/
-  // Get guestbook data
-  const getGuestbook = () => {
-    fetch(endpoint)
-      .then((response) => response.json())
-      .then((data) => setGuestbook(data));
-  };
-
   // Post Guestbook data
   const postMessage = () => {
-    let guest = {
+    firebase.database().ref().child("posts").push().set({
       name: name,
       message: message,
-    };
-    fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(guest),
-    }).then(() => {
-      getGuestbook();
     });
   };
 
   /** Effects *********************************************************/
   // On page load
   React.useEffect(() => {
-    getGuestbook();
+    // Connect to firebase stream
+    firebase
+      .database()
+      .ref("/posts/")
+      .on("child_added", (data) => {
+        console.log(data.val());
+        setGuestbook((state) => [data.val(), ...state]);
+      });
   }, []);
 
   /** Render page *****************************************************/
